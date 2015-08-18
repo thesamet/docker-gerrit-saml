@@ -1,17 +1,13 @@
 FROM thesamet/docker-buck
 
 USER root
-RUN mkdir /gerrit-src && chown buck /gerrit-src
-
-USER buck
-
-RUN git clone https://github.com/thesamet/gerrit.git /gerrit-src
-
-USER root
 RUN apt-get install -y zip
+RUN mkdir /build && chown buck /build
+
 USER buck
 
-WORKDIR /gerrit-src
-
-RUN /usr/bin/buck build gerrit
+RUN git clone https://github.com/thesamet/gerrit.git /build/gerrit-src && \
+    cd /build/gerrit-src && /usr/bin/buck build gerrit && \
+    cp buck-out/gen/gerrit.war /build/ && \
+    rm -rf /build/gerrit-src
 
