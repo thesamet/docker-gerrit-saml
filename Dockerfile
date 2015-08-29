@@ -8,6 +8,7 @@ USER buck
 
 RUN git clone https://github.com/thesamet/gerrit.git /build/gerrit-src && \
     cd /build/gerrit-src && \
+    echo -XX:MaxPermSize=512m -Xms8000m -Xmx16000m > .buckjavaargs && \
     /usr/bin/buck build gerrit && \
     /usr/bin/buck build release && \
     cp buck-out/gen/release.war /build/gerrit.war && \
